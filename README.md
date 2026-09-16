@@ -1,32 +1,28 @@
-# Wi-Fi Doctor 📡
+# Wi-Fi Doctor 🩺
 
-A network diagnostics tool that answers **where** a connection is struggling instead of reporting only one speed-test number.
+A local network diagnostic tool that answers a more useful question than a speed test: **which layer is failing?**
 
-## Diagnostic model
+## Run locally
 
-```text
-Device → Gateway → DNS → Internet → Latency/Jitter → Throughput
+```bash
+python -m venv .venv
+# Windows: .venv\\Scripts\\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --reload
 ```
 
-The tool will test each layer independently and present evidence such as:
+Open `http://127.0.0.1:8000`.
 
-- gateway reachability
-- DNS resolution time
-- latency and jitter samples
-- packet-loss observations
-- HTTP reachability
-- download/upload throughput
-- a time-series stability view
+> Run this locally. A deployed copy diagnoses the server's network, not your phone/PC Wi-Fi.
 
-The result should explain *which measurement is abnormal* rather than pretending to know the user's ISP problem from a single score.
+## Current MVP
 
-## Build phases
+- Default-gateway discovery on common desktop OSes
+- Gateway reachability probe
+- DNS lookup timing
+- Public internet reachability probe
+- Basic latency and reply-rate signals
+- Human-readable diagnosis page
 
-- **Phase 1:** cross-platform connectivity checks
-- **Phase 2:** repeated measurements + charts
-- **Phase 3:** diagnostic rules with transparent evidence
-- **Phase 4:** exportable diagnostic report
-
-## Intended stack
-
-Python + FastAPI + JavaScript + WebSockets + Chart.js.
+Future versions can add jitter charts, HTTP/TLS checks, interface details, and a historical diagnostics timeline.
